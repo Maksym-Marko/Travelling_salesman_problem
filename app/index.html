@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Trader's way</title>
+
+	<style>
+		.mx-control_panel{
+			position: absolute;
+			left: -312px;
+			top: 0px;
+			padding: 10px;
+			width: 300px;
+			min-height: 200px;
+			background: #b69ddc;
+			z-index: 777;
+			-webkit-transition: 0.3s all ease;
+    		transition: 0.3s all ease;
+		}
+		.mx-control_panel:hover{
+			left: 0px;
+			-webkit-transition: 0.3s all ease;
+    		transition: 0.3s all ease;
+		}
+		.mx-call{
+			position: absolute;
+			right: 0px;
+			background: #b69ddc;
+			padding: 4px 10px;
+			margin-right: -60px;
+		}
+		#map{
+			position: relative;
+			width: 100%;
+			min-width: 1000px; 
+			height: 100%;
+			min-height: 700px;
+			border: 2px solid #52357f;
+		}
+		.mx-point{
+			position: absolute;
+			width: 15px;
+			height: 15px;
+			margin-left: -8px;
+			margin-top: -8px;
+			border: 1px solid #333;
+			background: #ddd;
+			border-radius: 50%;
+			-moz-border-radius: 50%;
+		}
+		#count{
+			padding: 4px 10px;
+			display: block;
+			width: 150px;
+			margin: 10px auto;
+		}
+		.mx-info{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="mx-control_panel">
+		<div class="mx-call">Panel</div>
+		<p class="mx-info">
+			Поставте на карте точки, расстояние для которых Вы хотите расчитать. Первая - это стартовая точка (там, откуда продавец должен выезджать), остальные - точки, куда он должен заехать.
+		</p>
+		<p class="mx-info">
+			Для подсчета оптимального маршрута, необходимо поставить больше 2-х точек.
+		</p>
+		<button id="count" disabled="disabled">
+			Расчитать маршрут
+		</button>
+
+	</div>
+
+	<div id="map"></div>
+
+	<script src="./build/script.js"></script>
+	
+</body>
+</html>
