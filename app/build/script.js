@@ -111,10 +111,17 @@ var CalculateRoute = function () {
 			};
 		}
 	}, {
-		key: 'maxDistance',
-		value: function maxDistance(arrayDistances) {
-			var maxDistance = Math.max.apply(null, arrayDistances);
-			return maxDistance;
+		key: 'minDistance',
+		value: function minDistance() {
+
+			var arrayDistances = [];
+			var _arr = globalCountPointsTMP.map(function (el) {
+				arrayDistances.push(el[1]);
+			});
+
+			var minDistance = Math.min.apply(null, arrayDistances);
+
+			return minDistance;
 		}
 	}, {
 		key: 'distanceToPoint',
@@ -122,9 +129,7 @@ var CalculateRoute = function () {
 			//console.log( firstPoint + ' -> ' + secondPoint );
 
 
-			// 1 step find x and y
-
-
+			// 1 step find x and y		
 			var coordinatesFirstPoint = this.findCoordinatesPointFirst(firstPoint);
 			var coordinatesSecondPoint = this.findCoordinatesPointSecond(secondPoint);
 
@@ -132,7 +137,6 @@ var CalculateRoute = function () {
 			// console.log(coordinatesSecondPoint);
 
 
-			// 2 step
 			// count distance
 
 			// difference X
@@ -140,60 +144,30 @@ var CalculateRoute = function () {
 			var xSecondPoint = coordinatesSecondPoint.positionX;
 
 			// find cathetus 1
-			var differenceX = 0;
-			if (xFirstPoint > xSecondPoint) {
-				differenceX = xSecondPoint - xFirstPoint;
-			} else {
-				differenceX = xFirstPoint - xSecondPoint;
-			}
+			var differenceX = xSecondPoint - xFirstPoint;
+			differenceX = Math.abs(differenceX);
 
 			var cathetus1 = Math.pow(differenceX, 2);
-			// ______________________________________________
 
 			// difference Y
 			var yFirstPoint = coordinatesFirstPoint.positionY;
 			var ySecondPoint = coordinatesSecondPoint.positionY;
 
 			// find cathetus 2
-			var differenceY = 0;
-			if (yFirstPoint > ySecondPoint) {
-				differenceY = ySecondPoint - yFirstPoint;
-			} else {
-				differenceY = yFirstPoint - ySecondPoint;
-			}
+			var differenceY = ySecondPoint - yFirstPoint;
+			differenceY = Math.abs(differenceY);
 
 			var cathetus2 = Math.pow(differenceY, 2);
 
-			console.log(differenceY + ' ' + differenceX);
+			// console.log(differenceX);
 
 			// distance to point
 			var dToPoint = cathetus1 + cathetus2;
 			dToPoint = Math.sqrt(dToPoint);
+			dToPoint = parseInt(dToPoint);
 
 			// push to array
 			globalCountPointsTMP.push([secondPoint, dToPoint]);
-
-			// 
-			// 
-			// нужно узнать номер точки к которой самая короткая
-			// дистанция и запушить ее в масив globalPointsChecked
-			// 
-			// 
-			// проверить переменные difference(X/Y) чтобы небыло отрецательного значения
-			// 
-			// 
-			// 
-
-
-			// 3 step
-			// let arrayDistances = [];
-			// let _arr = globalCountPointsTMP.map(function(el){
-			// 	arrCount.push(el[1]);	
-			// });
-			// maxDistance(arrayDistances);
-
-			// 4 step
-			// globalCountPointsTMP = []; // clear array
 		}
 	}, {
 		key: 'dataNumberElement',
@@ -208,7 +182,7 @@ var CalculateRoute = function () {
 		value: function distanceToNeighboringPoint() {
 
 			// от данной точки идет измерение длины к следующим
-			if (globalStep === globalPoints.length) {
+			if (globalStep === globalPoints.length - 1) {
 				globalStep = globalPoints.length;
 				globalLopKey = false;
 			} else {
@@ -222,8 +196,24 @@ var CalculateRoute = function () {
 						this.distanceToPoint(this.dataNumberElement(), i);
 					}
 					// globalPointsChecked.push(i);
-
 				}
+
+				// Min distance
+				var minDistance = this.minDistance();
+				console.log(minDistance + '--------------');
+
+				// find in array point globalCountPointsTMP
+				var _arr = globalCountPointsTMP.map(function (el) {
+
+					if (el[1] === minDistance) {
+						globalPointsChecked.push(el[0]);
+					}
+				});
+
+				// cleat tmp array
+				globalCountPointsTMP = [];
+
+				console.log(globalPointsChecked);
 
 				// next step
 				globalStep++;
@@ -267,10 +257,9 @@ function countPointsInterval() {
 // ];
 // let arrCount = [];
 // let _arr = arr.map(function(el){
-// 	arrCount.push(el[1]);	
+
+// 	if(el[1] === 234){
+// 		console.log(el[0]);	
+// 	}
+
 // });
-// console.log(arrCount);
-
-// let _max = Math.max.apply(null, arrCount);
-
-// console.log(_max);

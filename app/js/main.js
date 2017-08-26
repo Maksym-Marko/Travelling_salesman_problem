@@ -92,102 +92,63 @@ class CalculateRoute{
 		};
 	}
 
-	maxDistance(arrayDistances){
-		let maxDistance = Math.max.apply(null, arrayDistances);
-		return maxDistance;
+	minDistance(){
+
+		let arrayDistances = [];
+		let _arr = globalCountPointsTMP.map(function(el){
+			arrayDistances.push(el[1]);	
+		});
+
+		let minDistance = Math.min.apply(null, arrayDistances);	
+
+		return minDistance;
+
 	}
 
 	distanceToPoint(firstPoint, secondPoint){
 		//console.log( firstPoint + ' -> ' + secondPoint );
 
 
-// 1 step find x and y
+		// 1 step find x and y		
+		let coordinatesFirstPoint = this.findCoordinatesPointFirst(firstPoint);
+		let coordinatesSecondPoint = this.findCoordinatesPointSecond(secondPoint);
 
-	
-	let coordinatesFirstPoint = this.findCoordinatesPointFirst(firstPoint);
-	let coordinatesSecondPoint = this.findCoordinatesPointSecond(secondPoint);
+		// console.log(coordinatesFirstPoint);
+		// console.log(coordinatesSecondPoint);
+			
 
-	// console.log(coordinatesFirstPoint);
-	// console.log(coordinatesSecondPoint);
-		
-
-// 2 step
 		// count distance
 
-	// difference X
-	let xFirstPoint = coordinatesFirstPoint.positionX;
-	let xSecondPoint = coordinatesSecondPoint.positionX;
+		// difference X
+		let xFirstPoint = coordinatesFirstPoint.positionX;
+		let xSecondPoint = coordinatesSecondPoint.positionX;
 
-	// find cathetus 1
-	let differenceX = 0;
-	if(xFirstPoint > xSecondPoint){
-		differenceX = xSecondPoint - xFirstPoint;
-	} else{
-		differenceX = xFirstPoint - xSecondPoint;
-	}
+		// find cathetus 1
+		let differenceX = xSecondPoint - xFirstPoint;
+		differenceX = Math.abs(differenceX);
 
-	let cathetus1 = Math.pow(differenceX, 2);
-	// ______________________________________________
+		let cathetus1 = Math.pow(differenceX, 2);
+		
 
-	// difference Y
-	let yFirstPoint = coordinatesFirstPoint.positionY;
-	let ySecondPoint = coordinatesSecondPoint.positionY;
+		// difference Y
+		let yFirstPoint = coordinatesFirstPoint.positionY;
+		let ySecondPoint = coordinatesSecondPoint.positionY;
 
-	// find cathetus 2
-	let differenceY = 0;
-	if(yFirstPoint > ySecondPoint){
-		differenceY = ySecondPoint - yFirstPoint;
-	} else{
-		differenceY = yFirstPoint - ySecondPoint;
-	}
+		// find cathetus 2
+		let differenceY = ySecondPoint - yFirstPoint;
+		differenceY = Math.abs(differenceY);
 
-	let cathetus2 = Math.pow(differenceY, 2);
+		let cathetus2 = Math.pow(differenceY, 2);
 
-	console.log(differenceY + ' ' + differenceX);
+		// console.log(differenceX);
 
-	// distance to point
-	let dToPoint = cathetus1 + cathetus2;
-	dToPoint = Math.sqrt(dToPoint);
+		// distance to point
+		let dToPoint = cathetus1 + cathetus2;
+		dToPoint = Math.sqrt(dToPoint);
+		dToPoint = parseInt(dToPoint);
 
-
-	// push to array
-	globalCountPointsTMP.push([secondPoint, dToPoint]);
-
-
-
-
-
-
-	// 
-	// 
-	// нужно узнать номер точки к которой самая короткая
-	// дистанция и запушить ее в масив globalPointsChecked
-	// 
-	// 
-	// проверить переменные difference(X/Y) чтобы небыло отрецательного значения
-	// 
-	// 
-	// 
-
-
-
-
-
-
-
-
-
-
-
-// 3 step
-		// let arrayDistances = [];
-		// let _arr = globalCountPointsTMP.map(function(el){
-		// 	arrCount.push(el[1]);	
-		// });
-		// maxDistance(arrayDistances);
-
-// 4 step
-		// globalCountPointsTMP = []; // clear array
+		// push to array
+		globalCountPointsTMP.push([secondPoint, dToPoint]);
 
 	}
 
@@ -201,7 +162,7 @@ class CalculateRoute{
 	distanceToNeighboringPoint(){
 		
 		// от данной точки идет измерение длины к следующим
-		if(globalStep === globalPoints.length){
+		if(globalStep === globalPoints.length-1){
 			globalStep = globalPoints.length;
 			globalLopKey = false;
 		} else{
@@ -217,11 +178,26 @@ class CalculateRoute{
 					this.distanceToPoint(this.dataNumberElement(), i);
 				}
 				// globalPointsChecked.push(i);
-
 				
 			}
 
+			// Min distance
+			let minDistance = this.minDistance();
+			console.log(minDistance+'--------------');
 
+			// find in array point globalCountPointsTMP
+			let _arr = globalCountPointsTMP.map(function(el){
+
+				if(el[1] === minDistance){
+					globalPointsChecked.push(el[0]);
+				}
+				
+			});
+
+			// cleat tmp array
+			globalCountPointsTMP = [];
+
+			console.log(globalPointsChecked);
 
 			// next step
 			globalStep++;
@@ -267,10 +243,14 @@ function countPointsInterval(){
 // ];
 // let arrCount = [];
 // let _arr = arr.map(function(el){
-// 	arrCount.push(el[1]);	
+
+// 	if(el[1] === 234){
+// 		console.log(el[0]);	
+// 	}
+	
 // });
-// console.log(arrCount);
 
-// let _max = Math.max.apply(null, arrCount);
 
-// console.log(_max);
+
+
+
