@@ -60,6 +60,7 @@ var CreatePoint = function () {
 			el.style.top = posY + 'px';
 
 			el.setAttribute('data-number-element', countPoints);
+			el.setAttribute('id', 'point_' + countPoints);
 			el.setAttribute('data-x', posX);
 			el.setAttribute('data-y', posY);
 
@@ -71,6 +72,47 @@ var CreatePoint = function () {
 	}]);
 
 	return CreatePoint;
+}();
+
+var ShowInfo = function () {
+	function ShowInfo(idElement, orderNumber, distance) {
+		_classCallCheck(this, ShowInfo);
+
+		this.idElement = idElement;
+		this.orderNumber = orderNumber;
+		this.distance = distance;
+	}
+
+	_createClass(ShowInfo, [{
+		key: 'createInfo',
+		value: function createInfo() {
+			// find point
+			var point = document.getElementById(this.idElement);
+
+			// add counter
+			var counter = document.createElement('div');
+			counter.className = 'mx_order_number';
+
+			var _span = document.createElement('span');
+			_span.innerHTML = this.orderNumber;
+
+			counter.appendChild(_span);
+
+			point.appendChild(counter);
+
+			// add distance
+			var distanceToPoint = document.createElement('div');
+			distanceToPoint.className = 'mx-distance';
+
+			if (this.idElement !== 'point_0') {
+				distanceToPoint.innerHTML = 'D: ' + (this.orderNumber - 1) + ' -> ' + this.orderNumber + ' = ' + this.distance + 'px';
+			}
+
+			point.appendChild(distanceToPoint);
+		}
+	}]);
+
+	return ShowInfo;
 }();
 
 var CalculateRoute = function () {
@@ -195,28 +237,33 @@ var CalculateRoute = function () {
 					} else {
 						this.distanceToPoint(this.dataNumberElement(), i);
 					}
-					// globalPointsChecked.push(i);
 				}
 
 				// Min distance
 				var minDistance = this.minDistance();
-				console.log(minDistance + '--------------');
+				//console.log(minDistance+'--------------');
 
 				// find in array point globalCountPointsTMP
+				var numEl = 0;
 				var _arr = globalCountPointsTMP.map(function (el) {
 
 					if (el[1] === minDistance) {
 						globalPointsChecked.push(el[0]);
+						numEl = el[0];
 					}
 				});
 
 				// cleat tmp array
 				globalCountPointsTMP = [];
 
-				console.log(globalPointsChecked);
+				//console.log(globalPointsChecked);
 
 				// next step
 				globalStep++;
+
+				// show info
+				var showInfo = new ShowInfo('point_' + numEl, globalStep, minDistance);
+				showInfo.createInfo();
 			}
 		}
 	}]);
@@ -238,6 +285,11 @@ newPoint.getField().onclick = function (event) {
 // count points
 var loop = '';
 arrPoint.getButton().onclick = function () {
+
+	// show info
+	var showInfo = new ShowInfo('point_0', 0, 0);
+	showInfo.createInfo();
+
 	loop = setInterval(countPointsInterval, 1000);
 };
 

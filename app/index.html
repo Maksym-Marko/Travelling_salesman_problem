@@ -57,6 +57,30 @@
 		.mx-info{
 			text-align: center;
 		}
+		.mx_order_number{
+			position: absolute;
+		    margin-top: -25px;
+		    min-width: 50px;
+		    text-align: center;
+		    left: 50%;
+		    margin-left: -25px;
+		    font-size: 14px;
+		}
+		.mx_order_number span{
+			background: #fff;
+		}
+		.mx-distance{
+			position: absolute;
+		    font-size: 12px;
+		    min-width: 100px;
+		    top: 18px;
+		    background: #fff;
+		    margin-left: -26px;
+		    display: none;
+		}
+		.mx-point:hover .mx-distance{
+			display: block;
+		}
 	</style>
 </head>
 <body>
@@ -75,7 +99,14 @@
 
 	</div>
 
-	<div id="map"></div>
+	<div id="map">
+		<!-- <div class="mx-point" data-number-element="0" data-x="268" data-y="89" style="left: 268px; top: 89px;">
+			<div class="mx_order_number"><span>454</span></div>
+			<div class="mx-distance">
+				D: 0 -> 1 = 34px
+			</div>
+		</div> -->
+	</div>
 
 	<script src="./build/script.js"></script>
 	

@@ -48,6 +48,7 @@ class CreatePoint{
 		el.style.top = posY + 'px';
 
 		el.setAttribute('data-number-element', countPoints);
+		el.setAttribute('id', 'point_' + countPoints);
 		el.setAttribute('data-x', posX);
 		el.setAttribute('data-y', posY);
 
@@ -56,6 +57,41 @@ class CreatePoint{
 		// push to array
 		globalPoints.push(el);
 		
+	}
+}
+
+class ShowInfo{
+	constructor(idElement, orderNumber, distance){
+		this.idElement = idElement;
+		this.orderNumber = orderNumber;
+		this.distance = distance;
+	}
+
+	createInfo(){
+		// find point
+		let point = document.getElementById(this.idElement);
+
+		// add counter
+		let counter = document.createElement('div');
+		counter.className = 'mx_order_number';
+
+		let _span = document.createElement('span');
+		_span.innerHTML = this.orderNumber;
+
+		counter.appendChild(_span);
+
+		point.appendChild(counter);
+
+		// add distance
+		let distanceToPoint = document.createElement('div');
+		distanceToPoint.className = 'mx-distance';
+
+		if(this.idElement !== 'point_0'){
+			distanceToPoint.innerHTML = 'D: ' + (this.orderNumber-1) + ' -> ' + this.orderNumber + ' = ' + this.distance + 'px';
+		}		
+
+		point.appendChild(distanceToPoint);
+
 	}
 }
 
@@ -166,8 +202,6 @@ class CalculateRoute{
 			globalStep = globalPoints.length;
 			globalLopKey = false;
 		} else{
-				
-
 			
 			// Calculate distance to points
 			for(let i=0; i<globalPoints.length; i++){
@@ -177,19 +211,20 @@ class CalculateRoute{
 				} else{					
 					this.distanceToPoint(this.dataNumberElement(), i);
 				}
-				// globalPointsChecked.push(i);
 				
 			}
 
 			// Min distance
 			let minDistance = this.minDistance();
-			console.log(minDistance+'--------------');
+			//console.log(minDistance+'--------------');
 
 			// find in array point globalCountPointsTMP
+			let numEl = 0;
 			let _arr = globalCountPointsTMP.map(function(el){
 
 				if(el[1] === minDistance){
 					globalPointsChecked.push(el[0]);
+					numEl = el[0];
 				}
 				
 			});
@@ -197,10 +232,15 @@ class CalculateRoute{
 			// cleat tmp array
 			globalCountPointsTMP = [];
 
-			console.log(globalPointsChecked);
+			//console.log(globalPointsChecked);
 
 			// next step
 			globalStep++;
+
+			// show info
+			let showInfo = new ShowInfo('point_' + numEl, globalStep, minDistance);
+			showInfo.createInfo();
+
 
 		}
 		
@@ -222,6 +262,11 @@ newPoint.getField().onclick = function(event){
 // count points
 let loop = '';
 arrPoint.getButton().onclick = function(){
+
+	// show info
+	let showInfo = new ShowInfo('point_0', 0, 0);
+	showInfo.createInfo();
+
 	loop = setInterval(countPointsInterval, 1000);
 }
 
