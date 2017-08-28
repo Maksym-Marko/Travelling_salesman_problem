@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Trader's way</title>
+	<title>Travelling salesman problem</title>
 
 	<style>
 		.mx-control_panel{
@@ -36,6 +36,9 @@
 			height: 100%;
 			min-height: 700px;
 			border: 2px solid #52357f;
+			background-image: url(img/img.png);
+			-webkit-background-size: 100%;
+			background-size: 100%;
 		}
 		.mx-point{
 			position: absolute;
@@ -51,7 +54,7 @@
 		#count{
 			padding: 4px 10px;
 			display: block;
-			width: 150px;
+			width: 160px;
 			margin: 10px auto;
 		}
 		.mx-info{
@@ -65,6 +68,7 @@
 		    left: 50%;
 		    margin-left: -25px;
 		    font-size: 14px;
+		    z-index: 8;
 		}
 		.mx_order_number span{
 			background: #fff;
@@ -77,6 +81,8 @@
 		    background: #fff;
 		    margin-left: -26px;
 		    display: none;
+		    text-align: center;
+		    z-index: 8;
 		}
 		.mx-point:hover .mx-distance{
 			display: block;
@@ -88,25 +94,18 @@
 	<div class="mx-control_panel">
 		<div class="mx-call">Panel</div>
 		<p class="mx-info">
-			Поставте на карте точки, расстояние для которых Вы хотите расчитать. Первая - это стартовая точка (там, откуда продавец должен выезджать), остальные - точки, куда он должен заехать.
+			Поставьте на карте точки, расстояние для которых Вы хотите рассчитать. Первая (0) - это стартовая точка (там, откуда продавец должен выезжать), остальные - точки, куда он должен заехать.
 		</p>
 		<p class="mx-info">
 			Для подсчета оптимального маршрута, необходимо поставить больше 2-х точек.
 		</p>
 		<button id="count" disabled="disabled">
-			Расчитать маршрут
+			Рассчитать маршрут
 		</button>
 
 	</div>
 
-	<div id="map">
-		<!-- <div class="mx-point" data-number-element="0" data-x="268" data-y="89" style="left: 268px; top: 89px;">
-			<div class="mx_order_number"><span>454</span></div>
-			<div class="mx-distance">
-				D: 0 -> 1 = 34px
-			</div>
-		</div> -->
-	</div>
+	<div id="map"></div>
 
 	<script src="./build/script.js"></script>
 	
