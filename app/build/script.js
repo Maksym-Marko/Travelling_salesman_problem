@@ -4,19 +4,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-window.globalPoints = [];
-window.globalPointsChecked = [0];
-window.globalCountPointsTMP = [];
-window.globalStep = 0;
-window.globalLopKey = true;
-window.openMap = true;
-window.distanceCountKey = true;
+window.app = {};
 
 var CreatePoint = function () {
 	function CreatePoint(map) {
 		_classCallCheck(this, CreatePoint);
 
 		this.map = map;
+
+		app.globalPoints = [];
 	}
 
 	_createClass(CreatePoint, [{
@@ -69,7 +65,7 @@ var CreatePoint = function () {
 			this.getField().appendChild(el);
 
 			// push to array
-			globalPoints.push(el);
+			app.globalPoints.push(el);
 		}
 	}]);
 
@@ -122,6 +118,13 @@ var CalculateRoute = function () {
 		_classCallCheck(this, CalculateRoute);
 
 		this.button = button;
+
+		app.globalPointsChecked = [0];
+		app.globalCountPointsTMP = [];
+		app.globalStep = 0;
+		app.globalLopKey = true;
+		app.openMap = true;
+		app.distanceCountKey = true;
 	}
 
 	_createClass(CalculateRoute, [{
@@ -134,8 +137,8 @@ var CalculateRoute = function () {
 		key: 'findCoordinatesPointFirst',
 		value: function findCoordinatesPointFirst(_pointFirst) {
 
-			var posX = globalPoints[_pointFirst].getAttribute('data-x');
-			var posY = globalPoints[_pointFirst].getAttribute('data-y');
+			var posX = app.globalPoints[_pointFirst].getAttribute('data-x');
+			var posY = app.globalPoints[_pointFirst].getAttribute('data-y');
 
 			// posX = parseInt(posX);
 			// posY = parseInt(posY);
@@ -149,8 +152,8 @@ var CalculateRoute = function () {
 		key: 'findCoordinatesPointSecond',
 		value: function findCoordinatesPointSecond(_secondPoint) {
 
-			var posX = globalPoints[_secondPoint].getAttribute('data-x');
-			var posY = globalPoints[_secondPoint].getAttribute('data-y');
+			var posX = app.globalPoints[_secondPoint].getAttribute('data-x');
+			var posY = app.globalPoints[_secondPoint].getAttribute('data-y');
 
 			// posX = parseInt(posX);
 			// posY = parseInt(posY);
@@ -165,7 +168,7 @@ var CalculateRoute = function () {
 		value: function minDistance() {
 
 			var arrayDistances = [];
-			var _arr = globalCountPointsTMP.map(function (el) {
+			var _arr = app.globalCountPointsTMP.map(function (el) {
 				arrayDistances.push(el[1]);
 			});
 
@@ -213,13 +216,13 @@ var CalculateRoute = function () {
 			dToPoint = parseInt(dToPoint);
 
 			// push to array
-			globalCountPointsTMP.push([secondPoint, dToPoint]);
+			app.globalCountPointsTMP.push([secondPoint, dToPoint]);
 		}
 	}, {
 		key: 'dataNumberElement',
 		value: function dataNumberElement() {
-			var _index = globalPointsChecked.length - 1;
-			var _number = globalPointsChecked[_index];
+			var _index = app.globalPointsChecked.length - 1;
+			var _number = app.globalPointsChecked[_index];
 
 			return _number;
 		}
@@ -227,21 +230,21 @@ var CalculateRoute = function () {
 		key: 'distanceToNeighboringPoint',
 		value: function distanceToNeighboringPoint() {
 
-			if (distanceCountKey === true) {
+			if (app.distanceCountKey === true) {
 
-				distanceCountKey = false;
+				app.distanceCountKey = false;
 				// ____________________
 
 				// от данной точки идет измерение длины к следующим
-				if (globalStep === globalPoints.length - 1) {
-					globalStep = globalPoints.length;
-					globalLopKey = false;
+				if (app.globalStep === app.globalPoints.length - 1) {
+					app.globalStep = app.globalPoints.length;
+					app.globalLopKey = false;
 				} else {
 
 					// Calculate distance to points
-					for (var i = 0; i < globalPoints.length; i++) {
+					for (var i = 0; i < app.globalPoints.length; i++) {
 
-						if (globalPointsChecked.indexOf(i) !== -1) {
+						if (app.globalPointsChecked.indexOf(i) !== -1) {
 							continue;
 						} else {
 							this.distanceToPoint(this.dataNumberElement(), i);
@@ -252,30 +255,30 @@ var CalculateRoute = function () {
 					var minDistance = this.minDistance();
 					// console.log(minDistance);
 
-					// find in array globalCountPointsTMP point
+					// find in array app.globalCountPointsTMP point
 					var numEl = 0;
-					var _arr = globalCountPointsTMP.map(function (el) {
+					var _arr = app.globalCountPointsTMP.map(function (el) {
 
 						if (el[1] === minDistance) {
-							globalPointsChecked.push(el[0]);
+							app.globalPointsChecked.push(el[0]);
 							numEl = el[0];
 						}
 					});
 
 					// clear tmp array
-					globalCountPointsTMP = [];
+					app.globalCountPointsTMP = [];
 
-					// console.log(globalPointsChecked);
+					// console.log(app.globalPointsChecked);
 
 					// next step
-					globalStep++;
+					app.globalStep++;
 
 					// show info
-					var showInfo = new ShowInfo('point_' + numEl, globalStep, minDistance);
+					var showInfo = new ShowInfo('point_' + numEl, app.globalStep, minDistance);
 					showInfo.createInfo();
 
 					// ___________________
-					distanceCountKey = true;
+					app.distanceCountKey = true;
 				}
 			}
 		}
@@ -293,7 +296,7 @@ var arrPoint = new CalculateRoute('count');
 // set points
 newPoint.getField().onclick = function (event) {
 
-	if (openMap === true) {
+	if (app.openMap === true) {
 		newPoint.createPoint(event);
 	}
 };
@@ -306,7 +309,7 @@ arrPoint.getButton().onclick = function () {
 	this.setAttribute('disabled', 'disabled');
 
 	// closed map
-	openMap = false;
+	app.openMap = false;
 
 	// show info
 	var showInfo = new ShowInfo('point_0', 0, 0);
@@ -319,7 +322,7 @@ function countPointsInterval() {
 
 	arrPoint.distanceToNeighboringPoint();
 
-	if (globalLopKey === false) {
+	if (app.globalLopKey === false) {
 		clearInterval(loop);
 	}
 }
